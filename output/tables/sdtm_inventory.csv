@@ -1,0 +1,26 @@
+domain,description,class,n_records,n_variables,observational_unit
+AE,Adverse Events,Events,9235,42,One record per adverse event
+CD,Cancer Diagnosis,Findings,3183,13,One record per cancer assessment for a subject
+CE,Clinical Event,Events,27589,26,One record per clinical event experienced by a subject
+CM,Concurrent Medication,Interventions,12119,27,One record per concomitant medication used by a subject
+DM,Demographics,Special Purpose,455,18,One record per subject
+DS,Disposition,Events,3104,19,One record per disposition experienced by a subject
+EG,Electrocardiogram Test,Findings,535,14,One record per ECG assessment (test) performed on a subject
+EX,Exposure,Interventions,5639,24,One record per treatment exposure for a subject
+IE,Inclusion/Exclusion Criterion,Special Purpose,61,14,One record per inclusion/exclusion criterion assessment for a subject
+LB,Laboratory Test,Findings,90466,32,One record per laboratory assessment performed on a subject
+LS,Lesion,Findings,12526,23,One record per lesion assessment for a subject
+MH,Medical History,Events,8353,25,One record per medical history event or condition for a subject
+PC,Pharmacokinetic Test,Findings,9754,25,One record per pharmacokinetic test performed on a subject
+PE,Physical Examination,Findings,2001,15,One record per physical examination assessment performed on a subject
+QS,Questionnaire,Findings,14017,21,One record per questionnaire result for a subject
+RA,Radiotherapy,Interventions,300,15,One record per radiotherapy treatment administered to a subject
+SG,Surgery,Interventions,2310,22,One record per surgery procedure for a subject
+SU,Substance Use,Findings,478,19,One record per reported substance use record for a subject
+SV,Subject Visits,Special Purpose,6006,11,One record per subject visit
+TA,Trial Arms,Special Purpose,90,10,One record per planned study element within a treatment arm
+TE,Trial Elements,Special Purpose,4,7,One record per planned study element
+TI,Trial Inclusion/Exclusion Criteria,Special Purpose,32,5,One record per inclusion or exclusion criterion defined in the study protocol
+TS,Trial Summary,Special Purpose,22,6,One record per trial summary parameter
+TV,Trial Visits,Special Purpose,62,6,One record per planned study visit
+VS,Vital Signs,Findings,21359,20,One record per vital sign assessment for a subject
