@@ -21,7 +21,7 @@ Using a Phase II oncology study from Sanofi (EFC10261), I am building reproducib
 |-----------|--------|
 | ✅ Milestone 1 – SDTM Domain Inventory | Complete |
 | ✅ Milestone 2 – Subject-Level Clinical Review | Complete |
-| ⏳ Milestone 3 – Cross-Domain Data Validation | Planned |
+| ✅  Milestone 3 – Cross-Domain Data Validation | Planned |
 | ⏳ Milestone 4 – Analysis-Ready Dataset Exploration | Planned |
 | ⏳ Milestone 5 – Clinical Programming Case Study | Planned |
 
