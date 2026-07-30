@@ -1,0 +1,13 @@
+Validation,Domain,Check,Finding_Count,Status
+Subject Integrity,EX,Subject exists in DM,0,PASS
+Subject Integrity,AE,Subject exists in DM,0,PASS
+Subject Integrity,LB,Subject exists in DM,0,PASS
+Subject Integrity,VS,Subject exists in DM,0,PASS
+Subject Integrity,QS,Subject exists in DM,0,PASS
+Visit Integrity,LB,Subject-visit combination exists in SV,0,PASS
+Visit Integrity,VS,Subject-visit combination exists in SV,0,PASS
+Visit Integrity,QS,Subject-visit combination exists in SV,0,PASS
+Temporal Consistency,AE,AEENDY is not earlier than AESTDY,0,PASS
+Temporal Consistency,EX,EXENDY is not earlier than EXSTDY,0,PASS
+Temporal Consistency,RA,RAENDY is not earlier than RASTDY,0,PASS
+Temporal Consistency,CM,CMENDY is not earlier than CMSTDY,0,PASS
