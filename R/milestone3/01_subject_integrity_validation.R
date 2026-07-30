@@ -55,8 +55,10 @@ subject_validation_results <- lapply(
     )
     
     summary <- data.frame(
+      Validation = "Subject Integrity",
       Domain = domain_name,
-      Missing_Subjects = length(subjects_missing_dm),
+      Check = "Subject exists in DM",
+      Finding_Count = length(subjects_missing_dm),
       Status = ifelse(
         length(subjects_missing_dm) == 0,
         "PASS",
@@ -67,16 +69,20 @@ subject_validation_results <- lapply(
     if (length(subjects_missing_dm) == 0) {
       
       findings <- data.frame(
+        Validation = character(0),
         Domain = character(0),
         RUSUBJID = character(0),
+        VISITNUM = numeric(0),
         Issue = character(0)
       )
       
     } else {
       
       findings <- data.frame(
+        Validation = "Subject Integrity",
         Domain = domain_name,
         RUSUBJID = subjects_missing_dm,
+        VISITNUM = NA_real_,
         Issue = paste(
           "Subject present in",
           domain_name,
@@ -98,21 +104,4 @@ subject_validation_summary <- bind_rows(
 
 subject_validation_findings <- bind_rows(
   lapply(subject_validation_results, function(x) x$findings)
-)
-
-###############################################################################
-# Export Validation Outputs
-
-write.csv(
-  subject_validation_summary,
-  file.path(listing_path,
-            "milestone3_subject_integrity_validation_summary.csv"),
-  row.names = FALSE
-)
-
-write.csv(
-  subject_validation_findings,
-  file.path(listing_path,
-            "milestone3_subject_integrity_validation_findings.csv"),
-  row.names = FALSE
 )
