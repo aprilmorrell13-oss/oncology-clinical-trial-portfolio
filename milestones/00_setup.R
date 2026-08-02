@@ -1,6 +1,6 @@
 # ============================================================
 # Phase II Oncology Clinical Trial Portfolio
-# Setup Script
+# Global Setup Script
 # Author: April Morrell
 # ============================================================
 
@@ -12,9 +12,5 @@ library(janitor)
 # Global options
 options(stringsAsFactors = FALSE)
 
-# Folder paths
+# Shared source-data path
 raw_path <- "data/raw/"
-derived_path <- "data/derived/"
-figure_path <- "output/figures/"
-table_path <- "output/tables/"
-listing_path <- "output/listings/"
