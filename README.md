@@ -2,7 +2,7 @@
 
 This repository documents my transition into clinical statistical programming through a series of hands-on projects using a publicly available oncology clinical trial submission package.
 
-Using a Phase II oncology study from Sanofi (EFC10261), I am building reproducible clinical programming workflows that reflect the types of programming, data review, quality control, and documentation performed by clinical and statistical programmers.
+Using the Sanofi EFC10261 Phase II Non-Small Cell Lung Cancer (NSCLC) study, I am building reproducible clinical programming workflows that reflect tasks commonly performed by clinical and statistical programmers, including SDTM data review, cross-domain validation, quality control, and reviewer-friendly reporting.
 
 ---
 
@@ -21,7 +21,7 @@ Using a Phase II oncology study from Sanofi (EFC10261), I am building reproducib
 |-----------|--------|
 | ✅ Milestone 1 – SDTM Domain Inventory | Complete |
 | ✅ Milestone 2 – Subject-Level Clinical Review | Complete |
-| ✅  Milestone 3 – Cross-Domain Data Validation | Planned |
+| ⏳ Milestone 3 – Cross-Domain Data Validation | In Progress |
 | ⏳ Milestone 4 – Analysis-Ready Dataset Exploration | Planned |
 | ⏳ Milestone 5 – Clinical Programming Case Study | Planned |
 
@@ -31,49 +31,17 @@ Using a Phase II oncology study from Sanofi (EFC10261), I am building reproducib
 
 ### ✅ Milestone 1 – SDTM Domain Inventory
 
-- Classified SDTM domains by CDISC observation class
-- Explored study metadata and domain structure
-- Identified relationships between clinical domains
-- Built a reproducible SDTM inventory workflow in R
+Reviewed the structure of the SDTM submission package, classified domains according to CDISC observation classes, and developed a reproducible SDTM inventory workflow.
+
+📁 `milestones/milestone1_sdtm_domain_inventory/`
+
+---
 
 ### ✅ Milestone 2 – Subject-Level Clinical Review
 
-Followed a single study participant (`010261-000-999-450`) across multiple SDTM domains to reconstruct the subject's clinical course.
+Reconstructed the clinical course of a single study participant by integrating treatment exposure, adverse events, disposition, target lesion assessments, and patient-reported outcomes across multiple SDTM domains.
 
-This milestone included:
-
-- Subject selection workflow
-- Cross-domain clinical timeline
-- Adverse event review
-- Patient-reported outcome review
-- Target lesion assessment
-- Reviewer listings
-- Publication-quality figures
-- Clinical review report
-
----
-
-### Patient-Reported Outcomes
-
-<p align="center">
-  <img src="output/figures/milestone2_patient_reported_outcomes.png" width="800">
-</p>
-
----
-
-### Target Lesion Size Changes from Baseline
-
-<p align="center">
-  <img src="output/figures/milestone2_target_lesion_percent_change.png" width="800">
-</p>
-
----
-
-### Subject-Level Clinical Timeline
-
-<p align="center">
-  <img src="output/figures/milestone2_subject_clinical_timeline.png" width="900">
-</p>
+📁 `milestones/milestone2_subject_clinical_review/`
 
 ---
 
@@ -84,9 +52,9 @@ This milestone included:
 - CDISC SDTM
 - Subject-level clinical review
 - Cross-domain data integration
-- Longitudinal data visualization with **ggplot2**
 - Clinical data validation
-- Reviewer-friendly outputs
+- Longitudinal data visualization using **ggplot2**
+- Reviewer-friendly outputs and reporting
 - Reproducible programming workflows
 - Git and GitHub version control
 
@@ -95,26 +63,30 @@ This milestone included:
 ## Repository Structure
 
 ```text
-R/                  Clinical programming scripts
-
 data/
-├── raw/            Original SDTM datasets
-└── derived/        Derived datasets
+├── raw/
+└── derived/
 
-docs/               Study documentation and metadata
+docs/
 
-milestones/         Milestone planning and documentation
-
-output/
-├── figures/        Clinical figures
-├── listings/       Reviewer listings
-└── tables/         Summary tables
-
-reports/            Final milestone reports
+milestones/
+├── milestone1_sdtm_domain_inventory/
+├── milestone2_subject_clinical_review/
+├── milestone3_cross_domain_validation/
+├── milestone4_analysis_ready_datasets/
+└── milestone5_clinical_programming_case_study/
 ```
 
 ---
 
-## Next Milestone
+## Portfolio Goal
 
-Milestone 3 will focus on cross-domain SDTM data validation by identifying inconsistencies, missingness, and clinically relevant data quality issues across multiple clinical domains.
+The goal of this project is to demonstrate practical clinical programming skills by building a series of reproducible, milestone-based projects that mirror common programming activities performed in pharmaceutical clinical development.
+
+Each milestone is self-contained and includes:
+
+- A milestone-specific README
+- Reproducible R programs
+- Derived outputs
+- Reviewer listings and figures (when applicable)
+- A polished report summarizing the work completed

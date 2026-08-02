@@ -8,14 +8,22 @@
 # selected subject.
 # ==============================================================================
 
+
 # 1. Setup ---------------------------------------------------------------------
 
-source("R/00_setup.R")
+source(
+  file.path(
+    "milestones",
+    "milestone2_subject_clinical_review",
+    "programs",
+    "00_setup.R"
+  )
+)
 
 selected_subject <- "010261-000-999-450"
 
 
-# 2. Load milestone outputs -----------------------------------------------------
+# 2. Load milestone outputs and required SDTM data ------------------------------
 
 subject_timeline <- readr::read_csv(
   file.path(
@@ -41,21 +49,30 @@ qs_summary <- readr::read_csv(
   show_col_types = FALSE
 )
 
-lesion_change_summary <- readr::read_csv(
+ls <- haven::read_sas(
   file.path(
-    listing_path,
-    "milestone2_lesion_change_summary.csv"
-  ),
-  show_col_types = FALSE
+    raw_path,
+    "ls.sas7bdat"
+  )
 )
 
-response_review <- readr::read_csv(
-  file.path(
-    listing_path,
-    "milestone2_response_review.csv"
-  ),
-  show_col_types = FALSE
-)
+lesion_review <- ls %>%
+  filter(
+    RUSUBJID == selected_subject,
+    LSTEST == "Measurement of Target Lesion"
+  ) %>%
+  select(
+    VISITNUM,
+    LSSPID,
+    LSDY,
+    LSSTRESC,
+    LSLOC
+  ) %>%
+  arrange(
+    LSSPID,
+    LSDY
+  )
+
 
 # 3. Create patient-reported outcomes figure -----------------------------------
 
@@ -78,16 +95,27 @@ qs_figure <- ggplot(
     shape = measure
   )
 ) +
-  geom_line(linewidth = 0.8) +
-  geom_point(size = 2.5) + 
+  geom_line(
+    linewidth = 0.8
+  ) +
+  geom_point(
+    size = 2.5
+  ) +
   scale_y_continuous(
     limits = c(0, 100),
-    breaks = seq(0, 100, by = 20)
+    breaks = seq(
+      0,
+      100,
+      by = 20
+    )
   ) +
   labs(
     title = "Patient-Reported Outcomes Over Time",
-    subtitle = paste("Subject:", selected_subject,
-                     "| Lower scores indicate better outcomes"),
+    subtitle = paste(
+      "Subject:",
+      selected_subject,
+      "| Lower scores indicate better outcomes"
+    ),
     x = "Study Day",
     y = "Score (0-100)",
     linetype = "Measure",
@@ -96,34 +124,38 @@ qs_figure <- ggplot(
   theme_minimal() +
   theme(
     legend.position = "bottom",
-    plot.title = element_text(face = "bold")
+    plot.title = element_text(
+      face = "bold"
+    )
   )
 
 qs_figure
 
-ggsave(
-  filename = file.path(
-    figure_path,
-    "milestone2_patient_reported_outcomes.png"
-  ),
-  plot = qs_figure,
-  width = 8,
-  height = 5,
-  dpi = 300
-)
 
 # 4. Create target lesion percent-change figure --------------------------------
+
 lesion_plot_data <- lesion_review %>%
   mutate(
-    lesion_size = as.numeric(LSSTRESC)
+    lesion_size = as.numeric(
+      LSSTRESC
+    )
   ) %>%
-  group_by(LSSPID) %>%
-  arrange(LSDY, .by_group = TRUE) %>%
+  group_by(
+    LSSPID
+  ) %>%
+  arrange(
+    LSDY,
+    .by_group = TRUE
+  ) %>%
   mutate(
-    baseline_size = first(lesion_size),
-    percent_change = 100 * (lesion_size - baseline_size) / baseline_size
+    baseline_size = first(
+      lesion_size
+    ),
+    percent_change = 100 *
+      (lesion_size - baseline_size) /
+      baseline_size
   ) %>%
-  ungroup ()
+  ungroup()
 
 lesion_figure <- ggplot(
   lesion_plot_data,
@@ -139,51 +171,60 @@ lesion_figure <- ggplot(
     linetype = "dashed",
     linewidth = 0.5
   ) +
-  geom_line(linewidth = 0.8) +
-  geom_point(size = 2.5) +
+  geom_line(
+    linewidth = 0.8
+  ) +
+  geom_point(
+    size = 2.5
+  ) +
   labs(
     title = "Target Lesion Size Changes from Baseline",
-    subtitle = paste("Subject:", selected_subject),
+    subtitle = paste(
+      "Subject:",
+      selected_subject
+    ),
     x = "Study Day",
     y = "Percent Change from Baseline",
-    linetype = "Target Lesion",
     shape = "Target Lesion",
     caption = "Positive = growth; Negative = shrinkage."
   ) +
   theme_minimal() +
   theme(
     legend.position = "bottom",
-    plot.title = element_text(face = "bold")
+    plot.title = element_text(
+      face = "bold"
+    )
   )
 
 lesion_figure
 
-ggsave(
-  filename = file.path(
-    figure_path,
-    "milestone2_target_lesion_percent_change.png"
-  ),
-  plot = lesion_figure,
-  width = 8,
-  height = 5,
-  dpi = 300
-)
 
-# 5. Create subject-level clinical timeline ------------------------------------
+# 5. Prepare subject-level clinical timeline data ------------------------------
 
 # Summarize actual treatment exposure periods.
 # Positive doses represent administered treatment.
 treatment_plot_data <- subject_timeline %>%
   filter(
     domain == "EX",
-    event %in% c("DOCETAXEL", "PLACEBO"),
+    event %in% c(
+      "DOCETAXEL",
+      "PLACEBO"
+    ),
     !is.na(value),
     value > 0
   ) %>%
-  group_by(event) %>%
+  group_by(
+    event
+  ) %>%
   summarise(
-    start_day = min(study_day, na.rm = TRUE),
-    end_day = max(study_day, na.rm = TRUE),
+    start_day = min(
+      study_day,
+      na.rm = TRUE
+    ),
+    end_day = max(
+      study_day,
+      na.rm = TRUE
+    ),
     .groups = "drop"
   ) %>%
   mutate(
@@ -193,7 +234,6 @@ treatment_plot_data <- subject_timeline %>%
       "PLACEBO" = "Placebo Exposure"
     )
   )
-
 
 # Select clinically meaningful adverse events
 ae_plot_data <- important_ae_review %>%
@@ -212,16 +252,28 @@ ae_plot_data <- important_ae_review %>%
   ) %>%
   mutate(
     timeline_row = "Important Adverse Events",
-    event_label = paste0(
-      stringr::str_to_title(
-        stringr::str_to_lower(AEDECOD)
-      ),
-      " (Grade ",
-      AETOXGR,
-      ")"
+    event_label = case_when(
+      AEDECOD == "URTICARIA" ~
+        paste0(
+          "Urticaria (G",
+          AETOXGR,
+          ")"
+        ),
+      AEDECOD == "PERIPHERAL SENSORY NEUROPATHY" ~
+        paste0(
+          "Neuropathy (G",
+          AETOXGR,
+          ")"
+        ),
+      AEDECOD == "CYTOLYTIC HEPATITIS" ~
+        paste0(
+          "Hepatitis (G",
+          AETOXGR,
+          ")"
+        ),
+      TRUE ~ AEDECOD
     )
   )
-
 
 # Identify disposition record for disease progression
 progression_plot_data <- subject_timeline %>%
@@ -229,17 +281,22 @@ progression_plot_data <- subject_timeline %>%
     domain == "DS",
     stringr::str_detect(
       event,
-      stringr::regex("progress", ignore_case = TRUE)
+      stringr::regex(
+        "progress",
+        ignore_case = TRUE
+      )
     )
   ) %>%
-  distinct(study_day, event) %>%
+  distinct(
+    study_day,
+    event
+  ) %>%
   mutate(
     timeline_row = "Disease Status",
     event_label = "Disease Progression"
   )
 
-
-# Set row order explicitly
+# Set timeline row order explicitly
 timeline_levels <- c(
   "Disease Status",
   "Docetaxel Exposure",
@@ -272,7 +329,8 @@ progression_plot_data <- progression_plot_data %>%
   )
 
 
-# Create figure
+# 6. Create subject-level clinical timeline figure -----------------------------
+
 clinical_timeline_figure <- ggplot() +
   
   # Treatment exposure periods
@@ -288,7 +346,7 @@ clinical_timeline_figure <- ggplot() +
     lineend = "round"
   ) +
   
-  # Treatment exposure endpoints
+  # Treatment exposure start points
   geom_point(
     data = treatment_plot_data,
     aes(
@@ -301,6 +359,7 @@ clinical_timeline_figure <- ggplot() +
     stroke = 0.8
   ) +
   
+  # Treatment exposure end points
   geom_point(
     data = treatment_plot_data,
     aes(
@@ -324,7 +383,7 @@ clinical_timeline_figure <- ggplot() +
     size = 3
   ) +
   
-  # Direct adverse event labels
+  # Important adverse event labels
   geom_text(
     data = ae_plot_data,
     aes(
@@ -335,6 +394,7 @@ clinical_timeline_figure <- ggplot() +
     hjust = -0.08,
     vjust = -0.9,
     size = 3.2,
+    fontface = "bold",
     check_overlap = TRUE
   ) +
   
@@ -349,7 +409,7 @@ clinical_timeline_figure <- ggplot() +
     size = 4
   ) +
   
-  # Disease progression label above marker
+  # Disease progression label
   geom_text(
     data = progression_plot_data,
     aes(
@@ -371,14 +431,29 @@ clinical_timeline_figure <- ggplot() +
   ) +
   
   scale_x_continuous(
-    breaks = seq(0, 450, by = 50),
-    limits = c(0, 475),
-    expand = expansion(mult = c(0.01, 0.01))
+    breaks = seq(
+      0,
+      450,
+      by = 50
+    ),
+    limits = c(
+      0,
+      475
+    ),
+    expand = expansion(
+      mult = c(
+        0.01,
+        0.01
+      )
+    )
   ) +
   
   labs(
     title = "Subject-Level Clinical Timeline",
-    subtitle = paste("Subject:", selected_subject),
+    subtitle = paste(
+      "Subject:",
+      selected_subject
+    ),
     x = "Study Day",
     y = NULL
   ) +
@@ -386,10 +461,15 @@ clinical_timeline_figure <- ggplot() +
   theme_minimal() +
   
   theme(
-    plot.title = element_text(face = "bold"),
+    plot.title = element_text(
+      face = "bold"
+    ),
     panel.grid.major.y = element_blank(),
     panel.grid.minor = element_blank(),
-    axis.text.y = element_text(face = "bold"),
+    axis.text.y = element_text(
+      face = "bold",
+      size = 11
+    ),
     legend.position = "none",
     plot.margin = margin(
       t = 15,
@@ -402,7 +482,57 @@ clinical_timeline_figure <- ggplot() +
 clinical_timeline_figure
 
 
-# Save figure
+# 7. Validate figure inputs -----------------------------------------------------
+
+stopifnot(
+  nrow(qs_plot_data) > 0,
+  nrow(lesion_plot_data) > 0,
+  nrow(treatment_plot_data) == 2,
+  nrow(ae_plot_data) == 3,
+  nrow(progression_plot_data) > 0
+)
+
+stopifnot(
+  all(
+    qs_plot_data$measure %in% c(
+      "LCSS Total Score",
+      "ASBI"
+    )
+  )
+)
+
+stopifnot(
+  all(
+    treatment_plot_data$start_day <=
+      treatment_plot_data$end_day
+  )
+)
+
+
+# 8. Save figures ---------------------------------------------------------------
+
+ggsave(
+  filename = file.path(
+    figure_path,
+    "milestone2_patient_reported_outcomes.png"
+  ),
+  plot = qs_figure,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+
+ggsave(
+  filename = file.path(
+    figure_path,
+    "milestone2_target_lesion_percent_change.png"
+  ),
+  plot = lesion_figure,
+  width = 8,
+  height = 5,
+  dpi = 300
+)
+
 ggsave(
   filename = file.path(
     figure_path,

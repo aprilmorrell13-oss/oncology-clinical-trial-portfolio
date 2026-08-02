@@ -11,7 +11,14 @@
 
 # 1. Setup ---------------------------------------------------------------------
 
-source("R/00_setup.R")
+source(
+  file.path(
+    "milestones",
+    "milestone2_subject_clinical_review",
+    "programs",
+    "00_setup.R"
+  )
+)
 
 selected_subject <- "010261-000-999-450"
 

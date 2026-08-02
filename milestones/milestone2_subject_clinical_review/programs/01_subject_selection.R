@@ -1,17 +1,26 @@
-#===============================================================================
+# ==============================================================================
 # Milestone 2: Subject-Level Clinical Story
 # Script 01: Subject Selection
 #
 # Purpose:
 # Identify subjects with data across key SDTM domains and select one subject
 # with sufficiently rich longitudinal data for clinical story reconstruction.
-#===============================================================================
+# ==============================================================================
 
-source(file.path("R", "00_setup.R"))
 
-#-------------------------------------------------------------------------------
-# 1. Load SDTM datasets
-#-------------------------------------------------------------------------------
+# 1. Setup ---------------------------------------------------------------------
+
+source(
+  file.path(
+    "milestones",
+    "milestone2_subject_clinical_review",
+    "programs",
+    "00_setup.R"
+  )
+)
+
+
+# 2. Load SDTM datasets ---------------------------------------------------------
 
 dm <- read_sas(file.path(raw_path, "dm.sas7bdat"))
 sv <- read_sas(file.path(raw_path, "sv.sas7bdat"))
@@ -26,9 +35,8 @@ qs <- read_sas(file.path(raw_path, "qs.sas7bdat"))
 cm <- read_sas(file.path(raw_path, "cm.sas7bdat"))
 mh <- read_sas(file.path(raw_path, "mh.sas7bdat"))
 
-#-------------------------------------------------------------------------------
-# 2. Identify subjects represented across all selected domains
-#-------------------------------------------------------------------------------
+
+# 3. Identify subjects represented across all selected domains -----------------
 
 subject_lists <- list(
   DM = unique(dm$RUSUBJID),
@@ -45,64 +53,99 @@ subject_lists <- list(
   MH = unique(mh$RUSUBJID)
 )
 
-common_subjects <- Reduce(intersect, subject_lists)
+common_subjects <- Reduce(
+  intersect,
+  subject_lists
+)
+
 cat(
   "Subjects represented in all 12 selected domains:",
   length(common_subjects),
   "\n"
 )
 
-#-------------------------------------------------------------------------------
-# 3. Calculate domain record counts by subject
-#-------------------------------------------------------------------------------
 
-ae_counts <- ae %>% 
+# 4. Calculate domain record counts by subject ---------------------------------
+
+ae_counts <- ae %>%
   group_by(RUSUBJID) %>%
-  summarise(n_ae = n(), .groups = "drop")
+  summarise(
+    n_ae = n(),
+    .groups = "drop"
+  )
 
 ex_counts <- ex %>%
   group_by(RUSUBJID) %>%
-  summarise(n_ex = n(), .groups = "drop")
+  summarise(
+    n_ex = n(),
+    .groups = "drop"
+  )
 
 lb_counts <- lb %>%
   group_by(RUSUBJID) %>%
-  summarise(n_lb = n(), .groups = "drop")
+  summarise(
+    n_lb = n(),
+    .groups = "drop"
+  )
 
 sv_counts <- sv %>%
   group_by(RUSUBJID) %>%
-  summarise(n_sv = n(), .groups = "drop")
+  summarise(
+    n_sv = n(),
+    .groups = "drop"
+  )
 
 vs_counts <- vs %>%
   group_by(RUSUBJID) %>%
-  summarise(n_vs = n(), .groups = "drop")
+  summarise(
+    n_vs = n(),
+    .groups = "drop"
+  )
 
 ds_counts <- ds %>%
   group_by(RUSUBJID) %>%
-  summarise(n_ds = n(), .groups = "drop")
+  summarise(
+    n_ds = n(),
+    .groups = "drop"
+  )
 
 cd_counts <- cd %>%
   group_by(RUSUBJID) %>%
-  summarise(n_cd = n(), .groups = "drop")
+  summarise(
+    n_cd = n(),
+    .groups = "drop"
+  )
 
 ls_counts <- ls %>%
   group_by(RUSUBJID) %>%
-  summarise(n_ls = n(), .groups = "drop")
+  summarise(
+    n_ls = n(),
+    .groups = "drop"
+  )
 
 qs_counts <- qs %>%
   group_by(RUSUBJID) %>%
-  summarise(n_qs = n(), .groups = "drop")
+  summarise(
+    n_qs = n(),
+    .groups = "drop"
+  )
 
 cm_counts <- cm %>%
   group_by(RUSUBJID) %>%
-  summarise(n_cm = n(), .groups = "drop")
+  summarise(
+    n_cm = n(),
+    .groups = "drop"
+  )
 
 mh_counts <- mh %>%
   group_by(RUSUBJID) %>%
-  summarise(n_mh = n(), .groups = "drop")
+  summarise(
+    n_mh = n(),
+    .groups = "drop"
+  )
 
-#-------------------------------------------------------------------------------
-# 4. Create derived subject-level domain count dataset
-#-------------------------------------------------------------------------------
+
+# 5. Create derived subject-level domain count dataset -------------------------
 
 subject_counts <- dm %>%
   distinct(RUSUBJID) %>%
@@ -116,40 +159,25 @@ subject_counts <- dm %>%
   left_join(ls_counts, by = "RUSUBJID") %>%
   left_join(qs_counts, by = "RUSUBJID") %>%
   left_join(cm_counts, by = "RUSUBJID") %>%
-  left_join(mh_counts, by = "RUSUBJID")
-
-subject_counts <- subject_counts %>%
+  left_join(mh_counts, by = "RUSUBJID") %>%
   mutate(
     across(
       starts_with("n_"),
-      ~ replace_na(.x,0)
+      ~ replace_na(.x, 0)
     )
   )
 
-write_csv(
-  subject_counts,
-  file.path(derived_path, "milestone2_subject_domain_counts.csv")
-)
 
-#-------------------------------------------------------------------------------
-# 5. Screen candidate subjects
-#-------------------------------------------------------------------------------
+# 6. Screen candidate subjects -------------------------------------------------
 
 top_ae_candidates <- subject_counts %>%
   arrange(desc(n_ae)) %>%
   slice_head(n = 10)
 
-top_ae_candidates
-
 candidate_subjects <- c(
   "010261-000-999-244",
   "010261-000-999-403",
   "010261-000-999-450"
-)
-
-write_csv(
-  top_ae_candidates,
-  file.path(listing_path, "milestone2_top_ae_candidates.csv")
 )
 
 candidate_dm <- dm %>%
@@ -158,35 +186,83 @@ candidate_dm <- dm %>%
 candidate_ds <- ds %>%
   filter(RUSUBJID %in% candidate_subjects)
 
-write_csv(
-  candidate_dm,
-  file.path(listing_path, "milestone2_candidate_demographics.csv")
-)
 
-write_csv(
-  candidate_ds,
-  file.path(listing_path, "milestone2_candidate_disposition.csv")
-)
-
-#-------------------------------------------------------------------------------
-# 6. Document final subject selection
-#-------------------------------------------------------------------------------
+# 7. Document final subject selection ------------------------------------------
 
 selected_subject <- "010261-000-999-450"
 
 selected_subject_profile <- subject_counts %>%
   filter(RUSUBJID == selected_subject)
 
-stopifnot(nrow(subject_counts) == n_distinct(dm$RUSUBJID))
-stopifnot(selected_subject %in% subject_counts$RUSUBJID)
-stopifnot(nrow(selected_subject_profile) == 1)
 
-selected_subject_profile
+# 8. Validate subject-selection outputs ----------------------------------------
+
+stopifnot(
+  nrow(subject_counts) ==
+    n_distinct(dm$RUSUBJID)
+)
+
+stopifnot(
+  selected_subject %in%
+    subject_counts$RUSUBJID
+)
+
+stopifnot(
+  nrow(selected_subject_profile) == 1
+)
+
+stopifnot(
+  length(common_subjects) == 432
+)
+
+
+# 9. Export Milestone 2 outputs ------------------------------------------------
+
+write_csv(
+  subject_counts,
+  file.path(
+    derived_path,
+    "milestone2_subject_domain_counts.csv"
+  ),
+  na = ""
+)
+
+write_csv(
+  top_ae_candidates,
+  file.path(
+    listing_path,
+    "milestone2_top_ae_candidates.csv"
+  ),
+  na = ""
+)
+
+write_csv(
+  candidate_dm,
+  file.path(
+    listing_path,
+    "milestone2_candidate_demographics.csv"
+  ),
+  na = ""
+)
+
+write_csv(
+  candidate_ds,
+  file.path(
+    listing_path,
+    "milestone2_candidate_disposition.csv"
+  ),
+  na = ""
+)
 
 write_csv(
   selected_subject_profile,
-  file.path(listing_path, "milestone2_selected_subject_profile.csv")
+  file.path(
+    listing_path,
+    "milestone2_selected_subject_profile.csv"
+  ),
+  na = ""
 )
+
 
 # Selection rationale:
 # Subject 010261-000-999-450 had rich longitudinal data across all selected
