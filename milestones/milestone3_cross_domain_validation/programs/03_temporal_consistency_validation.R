@@ -12,7 +12,9 @@
 
 # Project Setup
 
-source("R/00_setup.R")
+source(
+  "milestones/milestone3_cross_domain_validation/programs/00_setup.R"
+)
 
 ###############################################################################
 # Load Required SDTM Domains

@@ -12,14 +12,16 @@
 
 # Project Setup
 
-source("R/00_setup.R")
+source(
+  "milestones/milestone3_cross_domain_validation/programs/00_setup.R"
+)
 
 ###############################################################################
 # Run Validation Scripts
 
-source("R/milestone3/01_subject_integrity_validation.R")
-source("R/milestone3/02_visit_integrity_validation.R")
-source("R/milestone3/03_temporal_consistency_validation.R")
+source(file.path(program_path, "01_subject_integrity_validation.R"))
+source(file.path(program_path, "02_visit_integrity_validation.R"))
+source(file.path(program_path, "03_temporal_consistency_validation.R"))
 
 ###############################################################################
 # Combile Summaries
@@ -39,12 +41,20 @@ master_validation_findings <- bind_rows(
 ###############################################################################
 # Export Master Validation Outputs
 
-write_csv(
+write.csv(
   master_validation_summary,
-  file.path(listing_path, "milestone3_validation_summary.csv")
+  file.path(
+    listing_path,
+    "milestone3_validation_summary.csv"
+  ),
+  row.names = FALSE
 )
 
-write_csv(
+write.csv(
   master_validation_findings,
-  file.path(listing_path, "milestone3_validation_findings.csv")
+  file.path(
+    listing_path,
+    "milestone3_validation_findings.csv"
+  ),
+  row.names = FALSE
 )
