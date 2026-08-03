@@ -21,8 +21,8 @@ Using the Sanofi EFC10261 Phase II Non-Small Cell Lung Cancer (NSCLC) study, I a
 |-----------|--------|
 | ✅ Milestone 1 – SDTM Domain Inventory | Complete |
 | ✅ Milestone 2 – Subject-Level Clinical Review | Complete |
-| ⏳ Milestone 3 – Cross-Domain Data Validation | In Progress |
-| ⏳ Milestone 4 – Analysis-Ready Dataset Exploration | Planned |
+| ✅ Milestone 3 – Cross-Domain Data Validation | Complete |
+| ✅ Milestone 4 – Analysis-Ready Dataset Exploration | Complete |
 | ⏳ Milestone 5 – Clinical Programming Case Study | Planned |
 
 ---
