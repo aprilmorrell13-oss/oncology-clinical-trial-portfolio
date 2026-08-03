@@ -1,0 +1,2 @@
+n_missing_docetaxel_duration,n_missing_placebo_duration,n_missing_overall_duration,n_invalid_docetaxel_duration,n_invalid_placebo_duration,n_invalid_overall_duration,n_docetaxel_end_before_start,n_placebo_end_before_start,n_overall_end_before_start,n_overall_duration_shorter_than_component,validation_status
+0,0,0,0,0,0,0,0,0,0,PASS

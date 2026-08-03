@@ -1,0 +1,2 @@
+n_records,n_unique_subjects,n_duplicate_subjects,n_missing_eot_reason,n_missing_last_contact_day,n_missing_last_contact_record,validation_status
+447,447,0,0,344,32,PASS

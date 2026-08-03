@@ -1,0 +1,2 @@
+n_records,n_unique_subjects,n_duplicate_subjects,n_missing_exposure,n_missing_eot_reason,n_missing_last_contact_status,validation_status
+455,455,0,2,8,40,PASS
