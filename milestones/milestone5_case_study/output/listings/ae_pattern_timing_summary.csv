@@ -1,0 +1,7 @@
+AEPATT,start_day_status,n
+ONGOING WITHOUT CHANGE,Start day populated,4074
+NEW,Start day populated,3394
+ONGOING WITH CHANGE,Start day populated,1425
+ONGOING WITHOUT CHANGE,Missing start day,149
+NEW,Missing start day,129
+ONGOING WITH CHANGE,Missing start day,64

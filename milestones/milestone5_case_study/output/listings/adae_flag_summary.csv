@@ -1,0 +1,2 @@
+n_records,n_on_treatment,n_post_treatment,n_treatment_emergent,n_not_treatment_emergent,n_unclassified,treatment_emergent_reconciles,total_records_reconcile
+9235,7954,789,8743,150,342,TRUE,TRUE
