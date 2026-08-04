@@ -5,23 +5,28 @@
 # Author: April Morrell
 # ============================================================
 
-# Load packages
+# -----------------------------------------------------------------------------
+# 1. Load packages
+# -----------------------------------------------------------------------------
+
 library(tidyverse)
 library(haven)
 library(gt)
 
-# Global options
+# -----------------------------------------------------------------------------
+# 2. Global options
+# -----------------------------------------------------------------------------
 options(stringsAsFactors = FALSE)
 
 # ------------------------------------------------------------
-# Shared repository paths
+# 3. Shared repository paths
 # ------------------------------------------------------------
 
 # Sponsor-provided SDTM datasets remain shared across milestones
 raw_path <- file.path("data", "raw")
 
 # ------------------------------------------------------------
-# Milestone-specific paths
+# 4. Milestone-specific paths
 # ------------------------------------------------------------
 
 milestone_path <- file.path(
@@ -65,7 +70,7 @@ report_path <- file.path(
 )
 
 # ------------------------------------------------------------
-# Create milestone output folders if they do not exist
+# 5. Create milestone output folders if they do not exist
 # ------------------------------------------------------------
 
 milestone_directories <- c(
@@ -86,7 +91,7 @@ walk(
 )
 
 # ------------------------------------------------------------
-# Confirm that the shared raw-data folder exists
+# 6. Confirm that the shared raw-data folder exists
 # ------------------------------------------------------------
 
 if (!dir.exists(raw_path)) {

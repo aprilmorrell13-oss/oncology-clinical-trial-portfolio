@@ -10,14 +10,17 @@
 #   subject IDs appearing in subject-level domains also exist in DM.
 ###############################################################################
 
-# Project Setup
+# -----------------------------------------------------------------------------
+# 1. Project Setup
+# -----------------------------------------------------------------------------
 
 source(
   "milestones/milestone3_cross_domain_validation/programs/00_setup.R"
 )
 
-###############################################################################
-# Load Required SDTM Domains
+# -----------------------------------------------------------------------------
+# 2. Load Required SDTM Domains
+# -----------------------------------------------------------------------------
 
 dm <- read_sas(file.path(raw_path, "dm.sas7bdat"))
 ex <- read_sas(file.path(raw_path, "ex.sas7bdat"))
@@ -26,8 +29,9 @@ lb <- read_sas(file.path(raw_path, "lb.sas7bdat"))
 vs <- read_sas(file.path(raw_path, "vs.sas7bdat"))
 qs <- read_sas(file.path(raw_path, "qs.sas7bdat"))
 
-###############################################################################
-# Create DM Subject Reference
+# -----------------------------------------------------------------------------
+# 3. Create DM Subject Reference
+# -----------------------------------------------------------------------------
 
 dm_subjects <- unique(dm$RUSUBJID)
 
@@ -40,8 +44,9 @@ domains <- list(
   QS = qs
 )
 
-###############################################################################
-# Run Subject Integrity Validation
+# -----------------------------------------------------------------------------
+# 4. Run Subject Integrity Validation
+# -----------------------------------------------------------------------------
 
 subject_validation_results <- lapply(
   names(domains),

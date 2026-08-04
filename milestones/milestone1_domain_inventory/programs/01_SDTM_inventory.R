@@ -4,7 +4,10 @@
 # Author: April Morrell
 # ============================================================
 
-# Load milestone-specific setup
+# -----------------------------------------------------------------------------
+# 1. Load milestone-specific setup
+# -----------------------------------------------------------------------------
+
 source(
   file.path(
     "milestones",
@@ -15,7 +18,7 @@ source(
 )
 
 # ------------------------------------------------------------
-# Identify the sponsor-provided SDTM datasets
+# 2. Identify the sponsor-provided SDTM datasets
 # ------------------------------------------------------------
 
 sdtm_files <- list.files(
@@ -33,7 +36,7 @@ if (length(sdtm_files) == 0) {
 }
 
 # ------------------------------------------------------------
-# Create the programmatic dataset inventory
+# 3. Create the programmatic dataset inventory
 # ------------------------------------------------------------
 
 sdtm_inventory <- map_dfr(
@@ -58,7 +61,7 @@ sdtm_inventory <- map_dfr(
 print(sdtm_inventory)
 
 # ------------------------------------------------------------
-# Define domain-level metadata
+# 4. Define domain-level metadata
 # ------------------------------------------------------------
 
 domain_metadata <- tribble(
@@ -191,7 +194,7 @@ domain_metadata <- tribble(
 )
 
 # ------------------------------------------------------------
-# Add the descriptive metadata to the inventory
+# 5. Add the descriptive metadata to the inventory
 # ------------------------------------------------------------
 
 sdtm_inventory <- sdtm_inventory %>%
@@ -209,7 +212,7 @@ sdtm_inventory <- sdtm_inventory %>%
   )
 
 # ------------------------------------------------------------
-# Confirm that metadata exists for every imported domain
+# 6. Confirm that metadata exists for every imported domain
 # ------------------------------------------------------------
 
 missing_metadata <- sdtm_inventory %>%
@@ -233,7 +236,7 @@ if (nrow(missing_metadata) > 0) {
 print(sdtm_inventory)
 
 # ------------------------------------------------------------
-# Save the final inventory as a milestone-specific CSV
+# 7. Save the final inventory as a milestone-specific CSV
 # ------------------------------------------------------------
 
 write_csv(
@@ -245,7 +248,7 @@ write_csv(
 )
 
 # ------------------------------------------------------------
-# Save the formatted inventory as a milestone-specific figure
+# 8. Save the formatted inventory as a milestone-specific figure
 # ------------------------------------------------------------
 
 sdtm_inventory %>%
@@ -260,15 +263,3 @@ sdtm_inventory %>%
       "sdtm_inventory.png"
     )
   )
-
-# ------------------------------------------------------------
-# Completion message
-# ------------------------------------------------------------
-
-message(
-  "Milestone 1 inventory completed successfully.",
-  "\nCSV: ",
-  file.path(table_path, "sdtm_inventory.csv"),
-  "\nFigure: ",
-  file.path(figure_path, "sdtm_inventory.png")
-)

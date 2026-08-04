@@ -7,8 +7,9 @@
 # with sufficiently rich longitudinal data for clinical story reconstruction.
 # ==============================================================================
 
-
-# 1. Setup ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Setup 
+# -----------------------------------------------------------------------------
 
 source(
   file.path(
@@ -19,8 +20,9 @@ source(
   )
 )
 
-
-# 2. Load SDTM datasets ---------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Load SDTM datasets 
+# -----------------------------------------------------------------------------
 
 dm <- read_sas(file.path(raw_path, "dm.sas7bdat"))
 sv <- read_sas(file.path(raw_path, "sv.sas7bdat"))
@@ -35,8 +37,9 @@ qs <- read_sas(file.path(raw_path, "qs.sas7bdat"))
 cm <- read_sas(file.path(raw_path, "cm.sas7bdat"))
 mh <- read_sas(file.path(raw_path, "mh.sas7bdat"))
 
-
-# 3. Identify subjects represented across all selected domains -----------------
+# -----------------------------------------------------------------------------
+# 3. Identify subjects represented across all selected domains 
+# -----------------------------------------------------------------------------
 
 subject_lists <- list(
   DM = unique(dm$RUSUBJID),
@@ -64,8 +67,9 @@ cat(
   "\n"
 )
 
-
-# 4. Calculate domain record counts by subject ---------------------------------
+# -----------------------------------------------------------------------------
+# 4. Calculate domain record counts by subject 
+# -----------------------------------------------------------------------------
 
 ae_counts <- ae %>%
   group_by(RUSUBJID) %>%
@@ -144,8 +148,9 @@ mh_counts <- mh %>%
     .groups = "drop"
   )
 
-
-# 5. Create derived subject-level domain count dataset -------------------------
+# -----------------------------------------------------------------------------
+# 5. Create derived subject-level domain count dataset
+# -----------------------------------------------------------------------------
 
 subject_counts <- dm %>%
   distinct(RUSUBJID) %>%
@@ -167,8 +172,9 @@ subject_counts <- dm %>%
     )
   )
 
-
-# 6. Screen candidate subjects -------------------------------------------------
+# -----------------------------------------------------------------------------
+# 6. Screen candidate subjects 
+# -----------------------------------------------------------------------------
 
 top_ae_candidates <- subject_counts %>%
   arrange(desc(n_ae)) %>%
@@ -186,16 +192,18 @@ candidate_dm <- dm %>%
 candidate_ds <- ds %>%
   filter(RUSUBJID %in% candidate_subjects)
 
-
-# 7. Document final subject selection ------------------------------------------
+# -----------------------------------------------------------------------------
+# 7. Document final subject selection 
+# -----------------------------------------------------------------------------
 
 selected_subject <- "010261-000-999-450"
 
 selected_subject_profile <- subject_counts %>%
   filter(RUSUBJID == selected_subject)
 
-
-# 8. Validate subject-selection outputs ----------------------------------------
+# -----------------------------------------------------------------------------
+# 8. Validate subject-selection outputs 
+# -----------------------------------------------------------------------------
 
 stopifnot(
   nrow(subject_counts) ==
@@ -215,8 +223,9 @@ stopifnot(
   length(common_subjects) == 432
 )
 
-
-# 9. Export Milestone 2 outputs ------------------------------------------------
+# -----------------------------------------------------------------------------
+# 9. Export Milestone 2 outputs 
+# -----------------------------------------------------------------------------
 
 write_csv(
   subject_counts,

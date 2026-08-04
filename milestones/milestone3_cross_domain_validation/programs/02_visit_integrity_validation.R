@@ -10,22 +10,26 @@
 #   each subject-visit combination in LB, VS, and QS also exists in SV.
 ###############################################################################
 
-# Project Setup
+# -----------------------------------------------------------------------------
+# 1. Project Setup
+# -----------------------------------------------------------------------------
 
 source(
   "milestones/milestone3_cross_domain_validation/programs/00_setup.R"
 )
 
-###############################################################################
-# Load Required SDTM Domains
+# -----------------------------------------------------------------------------
+# 2. Load Required SDTM Domains
+# -----------------------------------------------------------------------------
 
 lb <- read_sas(file.path(raw_path, "lb.sas7bdat"))
 vs <- read_sas(file.path(raw_path, "vs.sas7bdat"))
 qs <- read_sas(file.path(raw_path, "qs.sas7bdat"))
 sv <- read_sas(file.path(raw_path, "sv.sas7bdat"))
 
-###############################################################################
-# Create SV Subject-Visit Reference
+# -----------------------------------------------------------------------------
+# 3. Create SV Subject-Visit Reference
+# -----------------------------------------------------------------------------
 
 sv_visit_reference <- sv %>%
   distinct(RUSUBJID, VISITNUM)
@@ -36,8 +40,9 @@ visit_domains <- list(
   QS = qs
 )
 
-###############################################################################
-# Run Visit Integrity Validation
+# -----------------------------------------------------------------------------
+# 4. Run Visit Integrity Validation
+# -----------------------------------------------------------------------------
 
 visit_validation_results <- lapply(
   names(visit_domains),
@@ -85,8 +90,9 @@ visit_validation_results <- lapply(
   }
 )
 
-###############################################################################
-# Create Validation Outputs
+# -----------------------------------------------------------------------------
+# 5. Create Validation Outputs
+# -----------------------------------------------------------------------------
 
 visit_validation_summary <- bind_rows(
   lapply(visit_validation_results, function(x) x$summary)

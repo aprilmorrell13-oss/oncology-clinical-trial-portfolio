@@ -8,8 +8,9 @@
 # selected subject.
 # ==============================================================================
 
-
-# 1. Setup ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Setup
+# -----------------------------------------------------------------------------
 
 source(
   file.path(
@@ -22,8 +23,9 @@ source(
 
 selected_subject <- "010261-000-999-450"
 
-
-# 2. Load milestone outputs and required SDTM data ------------------------------
+# -----------------------------------------------------------------------------
+# 2. Load Milestone Outputs and Required SDTM Data
+# -----------------------------------------------------------------------------
 
 subject_timeline <- readr::read_csv(
   file.path(
@@ -73,8 +75,9 @@ lesion_review <- ls %>%
     LSDY
   )
 
-
-# 3. Create patient-reported outcomes figure -----------------------------------
+# -----------------------------------------------------------------------------
+# 3. Create Patient-Reported Outcomes Figure
+# -----------------------------------------------------------------------------
 
 qs_plot_data <- qs_summary %>%
   mutate(
@@ -129,10 +132,10 @@ qs_figure <- ggplot(
     )
   )
 
-qs_figure
 
-
-# 4. Create target lesion percent-change figure --------------------------------
+# -----------------------------------------------------------------------------
+# 4. Create Target Lesion Percent-Change Figure
+# -----------------------------------------------------------------------------
 
 lesion_plot_data <- lesion_review %>%
   mutate(
@@ -196,10 +199,9 @@ lesion_figure <- ggplot(
     )
   )
 
-lesion_figure
-
-
-# 5. Prepare subject-level clinical timeline data ------------------------------
+# -----------------------------------------------------------------------------
+# 5. Prepare Subject-Level Clinical Timeline Data
+# -----------------------------------------------------------------------------
 
 # Summarize actual treatment exposure periods.
 # Positive doses represent administered treatment.
@@ -328,8 +330,9 @@ progression_plot_data <- progression_plot_data %>%
     )
   )
 
-
-# 6. Create subject-level clinical timeline figure -----------------------------
+# -----------------------------------------------------------------------------
+# 6. Create Subject-Level Clinical Timeline Figure
+# -----------------------------------------------------------------------------
 
 clinical_timeline_figure <- ggplot() +
   
@@ -481,8 +484,9 @@ clinical_timeline_figure <- ggplot() +
 
 clinical_timeline_figure
 
-
-# 7. Validate figure inputs -----------------------------------------------------
+# -----------------------------------------------------------------------------
+# 7. Validate Figure Inputs
+# -----------------------------------------------------------------------------
 
 stopifnot(
   nrow(qs_plot_data) > 0,
@@ -508,8 +512,9 @@ stopifnot(
   )
 )
 
-
-# 8. Save figures ---------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 8. Save Figures
+# -----------------------------------------------------------------------------
 
 ggsave(
   filename = file.path(

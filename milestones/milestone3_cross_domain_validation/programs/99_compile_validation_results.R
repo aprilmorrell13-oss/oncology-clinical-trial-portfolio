@@ -10,21 +10,25 @@
 #   validation summary and a master findings listing.
 ###############################################################################
 
-# Project Setup
+# -----------------------------------------------------------------------------
+# 1. Project Setup
+# -----------------------------------------------------------------------------
 
 source(
   "milestones/milestone3_cross_domain_validation/programs/00_setup.R"
 )
 
-###############################################################################
-# Run Validation Scripts
+# -----------------------------------------------------------------------------
+# 2. Run Validation Scripts
+# -----------------------------------------------------------------------------
 
 source(file.path(program_path, "01_subject_integrity_validation.R"))
 source(file.path(program_path, "02_visit_integrity_validation.R"))
 source(file.path(program_path, "03_temporal_consistency_validation.R"))
 
-###############################################################################
-# Combile Summaries
+# -----------------------------------------------------------------------------
+# 3. Combine Summaries
+# -----------------------------------------------------------------------------
 
 master_validation_summary <- bind_rows(
   subject_validation_summary,
@@ -38,8 +42,9 @@ master_validation_findings <- bind_rows(
   temporal_validation_findings
 )
 
-###############################################################################
-# Export Master Validation Outputs
+# -----------------------------------------------------------------------------
+# 4. Export Master Validation Outputs
+# -----------------------------------------------------------------------------
 
 write.csv(
   master_validation_summary,

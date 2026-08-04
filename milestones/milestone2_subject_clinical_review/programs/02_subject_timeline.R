@@ -8,8 +8,9 @@
 # only to derive missing study days when appropriate.
 # ==============================================================================
 
-
-# 1. Setup ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 1. Setup 
+# -----------------------------------------------------------------------------
 
 source(
   file.path(
@@ -22,15 +23,18 @@ source(
 
 selected_subject <- "010261-000-999-450"
 
-
-# 2. Load required SDTM domains ------------------------------------------------
+# -----------------------------------------------------------------------------
+# 2. Load Required SDTM Domains
+# -----------------------------------------------------------------------------
 
 ex <- haven::read_sas(file.path(raw_path, "ex.sas7bdat"))
 ae <- haven::read_sas(file.path(raw_path, "ae.sas7bdat"))
 ds <- haven::read_sas(file.path(raw_path, "ds.sas7bdat"))
 sv <- haven::read_sas(file.path(raw_path, "sv.sas7bdat"))
 
-# 3. Create exposure timeline --------------------------------------------------
+# -----------------------------------------------------------------------------
+# 3. Create Exposure Timeline 
+# -----------------------------------------------------------------------------
 
 ex_timeline <- ex %>%
   filter(RUSUBJID == selected_subject) %>%
@@ -61,7 +65,9 @@ ex_timeline <- ex %>%
     )
   )
 
-# 4. Create adverse event timeline --------------------------------------------
+# -----------------------------------------------------------------------------
+# 4. Create Adverse Event Timeline 
+# -----------------------------------------------------------------------------
 
 ae_timeline <- ae %>%
   filter(RUSUBJID == selected_subject) %>%
@@ -82,7 +88,9 @@ ae_timeline <- ae %>%
     )
   )
 
-# 5. Create disposition timeline ----------------------------------------------
+# -----------------------------------------------------------------------------
+# 5. Create Disposition Timeline 
+# -----------------------------------------------------------------------------
 
 ds_timeline <- ds %>%
   filter(RUSUBJID == selected_subject) %>%
@@ -110,7 +118,9 @@ ds_timeline <- ds %>%
     )
   )  
 
-# 6. Combine timeline records --------------------------------------------------
+# -----------------------------------------------------------------------------
+# 6. Combine Timeline Records
+# -----------------------------------------------------------------------------
 
 subject_timeline <- bind_rows(
   ex_timeline,
@@ -119,7 +129,9 @@ subject_timeline <- bind_rows(
 ) %>%
   arrange(study_day, domain, event)
 
-# 7. Validate derived timeline -------------------------------------------------
+# -----------------------------------------------------------------------------
+# 7. Validate Derived Timeline 
+# -----------------------------------------------------------------------------
 
 # Confirm that only the selected subject is represented
 stopifnot(n_distinct(subject_timeline$RUSUBJID) == 1)
@@ -155,7 +167,9 @@ stopifnot(
     nrow()
 )
 
-# 8. Review timeline -----------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 8. Review Timeline 
+# -----------------------------------------------------------------------------
 
 # Confirm the number of timeline records contributed by each domain
 domain_record_counts <- subject_timeline %>%
@@ -170,8 +184,9 @@ missing_study_day_review <- subject_timeline %>%
 
 print(missing_study_day_review)
 
-
-# 9. Export derived timeline ---------------------------------------------------
+# -----------------------------------------------------------------------------
+# 9. Export Derived Timeline 
+# -----------------------------------------------------------------------------
 
 write_csv(
   subject_timeline,

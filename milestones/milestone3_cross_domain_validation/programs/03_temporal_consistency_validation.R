@@ -10,22 +10,27 @@
 #   that an end study day does not occur before its corresponding start study day.
 ###############################################################################
 
-# Project Setup
+# -----------------------------------------------------------------------------
+# 1. Project Setup
+# -----------------------------------------------------------------------------
 
 source(
   "milestones/milestone3_cross_domain_validation/programs/00_setup.R"
 )
 
-###############################################################################
-# Load Required SDTM Domains
+# -----------------------------------------------------------------------------
+# 2. Load Required SDTM Domains
+# -----------------------------------------------------------------------------
 
 ae <- read_sas(file.path(raw_path, "ae.sas7bdat"))
 ex <- read_sas(file.path(raw_path, "ex.sas7bdat"))
 ra <- read_sas(file.path(raw_path, "ra.sas7bdat"))
 cm <- read_sas(file.path(raw_path, "cm.sas7bdat"))
 
-###############################################################################
-# Define Validation Scope
+# -----------------------------------------------------------------------------
+# 3. Define Validation Scope
+# -----------------------------------------------------------------------------
+
 temporal_domains <- list(
   AE = list(
     data = ae,
@@ -53,8 +58,9 @@ temporal_domains <- list(
   )
 )
 
-###############################################################################
-# Run Temporal Consistency Validation
+# -----------------------------------------------------------------------------
+# 4. Run Temporal Consistency Validation
+# -----------------------------------------------------------------------------
 
 temporal_validation_results <- lapply(
   names(temporal_domains),
@@ -108,8 +114,9 @@ temporal_validation_results <- lapply(
   }
 )
 
-###############################################################################
-# Create Validation Outputs
+# -----------------------------------------------------------------------------
+# 5. Create Validation Outputs
+# -----------------------------------------------------------------------------
 
 temporal_validation_summary <- bind_rows(
   lapply(temporal_validation_results, function(x) x$summary)
